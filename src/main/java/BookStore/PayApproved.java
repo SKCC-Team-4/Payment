@@ -9,9 +9,25 @@ public class PayApproved extends AbstractEvent {
     private Long orderId;
     private String status;
     private Date paymentDate;
+    private String stateMsg = "Payment Request";
 
     public PayApproved(){
         super();
+    }
+
+    public PayApproved(Payment payment){
+        this();
+        this.setOrderId(payment.getOrderId());
+        this.setPaymentDate(payment.getPaymentDate());
+        this.setStatus(payment.getStatus());
+    }
+
+    public String getStateMessage() {
+        return stateMsg;
+    }
+
+    public void setStateMessage(String stateMsg) {
+        this.stateMsg = stateMsg;
     }
 
     public Long getId() {

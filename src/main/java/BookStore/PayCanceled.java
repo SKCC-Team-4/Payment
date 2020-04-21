@@ -8,13 +8,30 @@ public class PayCanceled extends AbstractEvent {
     private Long orderId;
     private String status;
     private Date cancelDate;
+    private  String stateMsg = "Payment Canceled";
 
     public PayCanceled(){
         super();
     }
 
+    public PayCanceled(Payment payment){
+        this();
+        this.setOrderId(payment.getOrderId());
+        this.setCancelDate(payment.getCancelDate());
+        this.setStatus(payment.getStatus());
+    }
+
+
     public Long getId() {
         return id;
+    }
+
+    public String getStateMessage() {
+        return stateMsg;
+    }
+
+    public void setStateMessage(String stateMsg) {
+        this.stateMsg = stateMsg;
     }
 
     public void setId(Long id) {

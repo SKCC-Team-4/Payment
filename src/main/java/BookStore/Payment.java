@@ -17,12 +17,18 @@ public class Payment {
     private Date paymentDate;
     private Date cancelDate;
 
+
     @PostPersist
-    public void onPostPersist(){
+    public void onPostPersist() {
         PayApproved payApproved = new PayApproved();
         BeanUtils.copyProperties(this, payApproved);
         payApproved.publish();
 
+        Delivery delivery = new Delivery();
+        // mappings goes here
+        delivery.setOrderId(payApproved.getOrderId());
+        Application.applicationContext.getBean(DeliveryService.class)
+                .deliveryRequest(delivery);
 
     }
 
@@ -31,6 +37,12 @@ public class Payment {
         PayCanceled payCanceled = new PayCanceled();
         BeanUtils.copyProperties(this, payCanceled);
         payCanceled.publish();
+
+        Delivery delivery = new Delivery();
+        // mappings goes here
+        delivery.setOrderId(payCanceled.getOrderId());
+        Application.applicationContext.getBean(DeliveryService.class)
+                .deliveryCancel(delivery);
 
 
     }
