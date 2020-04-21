@@ -1,59 +1,40 @@
 package BookStore;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.PostPersist;
+import org.springframework.beans.BeanUtils;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
+import javax.persistence.*;
+import java.util.Date;
 
 @Entity
+@Table(name="Payment_table")
 public class Payment {
+
     @Id
-    @GeneratedValue
-    Long id;
-    String name;
-    Long price;
-    int qty;
+    @GeneratedValue(strategy=GenerationType.AUTO)
+    private Long id;
+    private Long orderId;
+    private String status;
+    private Date paymentDate;
+    private Date cancelDate;
 
     @PostPersist
-    public void eventPublish(){
+    public void onPostPersist(){
         PayApproved payApproved = new PayApproved();
-        payApproved.setBookId(this.getId());
-        payApproved.setBookName(this.getName());
-        payApproved.setBookPrice(this.getPrice());
-        payApproved.setTotalQty(this.getQty());
-        ObjectMapper objectMapper = new ObjectMapper();
-        String json = null;
+        BeanUtils.copyProperties(this, payApproved);
+        payApproved.publish();
 
-        try {
-            json = objectMapper.writeValueAsString(payApproved);
-        } catch (JsonProcessingException e) {
-            throw new RuntimeException("JSON format exception", e);
-        }
-        System.out.println(json);
+
     }
 
-    public int getQty() {
-        return qty;
+    @PostUpdate
+    public void onPostUpdate(){
+        PayCanceled payCanceled = new PayCanceled();
+        BeanUtils.copyProperties(this, payCanceled);
+        payCanceled.publish();
+
+
     }
 
-    public void setQty(int qty) {
-        this.qty = qty;
-    }
-
-    public Long getPrice() {
-        return price;
-    }
-
-    public void setPrice(Long price) {
-        this.price = price;
-    }
-
-    public Payment(){
-        super();
-    }
 
     public Long getId() {
         return id;
@@ -62,12 +43,36 @@ public class Payment {
     public void setId(Long id) {
         this.id = id;
     }
-
-    public String getName() {
-        return name;
+    public Long getOrderId() {
+        return orderId;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setOrderId(Long orderId) {
+        this.orderId = orderId;
     }
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
+    public Date getPaymentDate() {
+        return paymentDate;
+    }
+
+    public void setPaymentDate(Date paymentDate) {
+        this.paymentDate = paymentDate;
+    }
+    public Date getCancelDate() {
+        return cancelDate;
+    }
+
+    public void setCancelDate(Date cancelDate) {
+        this.cancelDate = cancelDate;
+    }
+
+
+
+
 }
