@@ -20,6 +20,7 @@ public class AbstractEvent {
         this.setEventType(this.getClass().getSimpleName());
         SimpleDateFormat defaultSimpleDateFormat = new SimpleDateFormat("YYYYMMddHHmmss");
         this.timestamp = defaultSimpleDateFormat.format(new Date());
+        System.out.println("AbstractEvent");
     }
 
     public String toJson(){
@@ -41,6 +42,7 @@ public class AbstractEvent {
     public void publish(String json){
         if( json != null ){
 
+            System.out.println("publish");
             /**
              * spring streams 방식
              */
