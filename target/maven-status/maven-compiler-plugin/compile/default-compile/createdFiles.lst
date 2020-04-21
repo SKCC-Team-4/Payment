@@ -1,0 +1,6 @@
+BookStore\PolicyHandler.class
+BookStore\config\kafka\KafkaProcessor.class
+BookStore\PayApproved.class
+BookStore\AbstractEvent.class
+BookStore\PayCanceled.class
+BookStore\Application.class
